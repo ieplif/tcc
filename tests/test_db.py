@@ -17,4 +17,4 @@ def test_create_user(session):
         select(User).where(User.email == 'filipe@email.com')
     )
 
-    assert result.username == 'filiperibeiro'
+    assert result.id == 1

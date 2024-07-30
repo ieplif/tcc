@@ -10,6 +10,7 @@ python = ">=3.12,<4.0"
 fastapi = "^0.111.0"
 pytest = "^8.2.2"
 sqlalchemy = "^2.0.31"
+pydantic-settings = "^2.4.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.10"
