@@ -53,13 +53,13 @@ def test_update_user(client, user, token):
             'password': '123',
             'username': 'testusername2',
             'email': 'test@test.com',
-            'id': 1,
+            'id': user.id,
         },
     )
     assert response.json() == {
         'username': 'testusername2',
         'email': 'test@test.com',
-        'id': 1,
+        'id': user.id,
     }
 
 
