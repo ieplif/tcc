@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 from fast_zero.database import get_session
 from fast_zero.models import User
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/token')
 
 pwd_context = PasswordHash.recommended()
 
