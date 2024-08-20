@@ -7,7 +7,14 @@ from sqlalchemy.orm import Session
 
 from fast_zero.database import get_session
 from fast_zero.models import Patient, User
-from fast_zero.schemas import Message, PatientFilter, PatientList, PatientPublic, PatientSchema
+from fast_zero.schemas import (
+    Message,
+    PatientFilter,
+    PatientList,
+    PatientPublic,
+    PatientSchema,
+    PatientUpdate,
+)
 from fast_zero.security import get_current_user
 
 router = APIRouter(prefix='/patients', tags=['patients'])
@@ -87,3 +94,22 @@ def delete_patient(patient_id: int, session: T_Session, user: CurrentUser):
     session.commit()
 
     return {'message': 'Task has been deleted successfully.'}
+
+
+@router.patch('/{patient_id}', response_model=PatientPublic)
+def patch_patient(patient_id: int, session: T_Session, user: CurrentUser, patient: PatientUpdate):
+    db_patient = session.scalar(
+        select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id)
+    )
+
+    if not db_patient:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
+
+    for key, value in patient.model_dump(exclude_unset=True).items():
+        setattr(db_patient, key, value)
+
+    session.add(db_patient)
+    session.commit()
+    session.refresh(db_patient)
+
+    return db_patient

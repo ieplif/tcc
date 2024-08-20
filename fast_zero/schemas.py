@@ -59,3 +59,16 @@ class PatientFilter(BaseModel):
     commercial_address: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class PatientUpdate(BaseModel):
+    full_name: Optional[str] = None
+    age: Optional[int] = None
+    place_of_birth: Optional[str] = None
+    marital_status: Optional[str] = None
+    gender: Optional[str] = None
+    profession: Optional[str] = None
+    residential_address: Optional[str] = None
+    commercial_address: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None

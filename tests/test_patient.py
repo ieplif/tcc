@@ -106,3 +106,31 @@ def test_delete_patient_error(client, token):
 
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert response.json() == {'detail': 'Task not found.'}
+
+
+def test_patch_patient(session, client, user, token):
+    patient = PatientFactory(user_id=user.id)
+
+    session.add(patient)
+    session.commit()
+    session.refresh(patient)
+
+    response = client.patch(
+        f'/patients/{patient.id}',
+        json={'full_name': 'Maria Aparecida'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json()['full_name'] == 'Maria Aparecida'
+
+
+def test_patch_patient_error(client, token):
+    response = client.patch(
+        '/patients/10',
+        json={},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Task not found.'}
