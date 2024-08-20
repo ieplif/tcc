@@ -25,3 +25,18 @@ class UserList(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class PatientSchema(BaseModel):
+    full_name: str
+    age: int
+    place_of_birth: str
+    marital_status: str
+    gender: str
+    profession: str
+    residential_address: str
+    commercial_address: str
+
+
+class PatientPublic(PatientSchema):
+    id: int

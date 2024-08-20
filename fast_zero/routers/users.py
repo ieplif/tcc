@@ -24,9 +24,7 @@ def read_users(session: T_Session, limit: int = 10, skip: int = 0):
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
 def create_user(user: UserSchema, session: T_Session):
     db_user = session.scalar(
-        select(User).where(
-            (User.username == user.username) | (User.email == user.email)
-        )
+        select(User).where((User.username == user.username) | (User.email == user.email))
     )
 
     if db_user:
@@ -62,9 +60,7 @@ def update_user(
     current_user: T_CurrentUser,
 ):
     if current_user.id != user_id:
-        raise HTTPException(
-            HTTPStatus.FORBIDDEN, detail='Not enough permissions'
-        )
+        raise HTTPException(HTTPStatus.FORBIDDEN, detail='Not enough permissions')
 
     current_user.email = user.email
     current_user.username = user.username
