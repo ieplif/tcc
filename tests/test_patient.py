@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from tests.conftest import PatientFactory
 
 
@@ -83,3 +85,24 @@ def test_list_patients_filter_place_of_birth_should_return_5_patients(session, c
     )
 
     assert len(response.json()['patients']) == expected_patients
+
+
+def test_delete_patient(session, client, user, token):
+    patient = PatientFactory(user_id=user.id)
+    session.add(patient)
+    session.commit()
+    session.refresh(patient)
+
+    response = client.delete(
+        f'/patients/{patient.id}', headers={'Authorization': f'Bearer {token}'}
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'message': 'Task has been deleted successfully.'}
+
+
+def test_delete_patient_error(client, token):
+    response = client.delete(f'/patients/{10}', headers={'Authorization': f'Bearer {token}'})
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Task not found.'}

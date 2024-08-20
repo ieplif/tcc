@@ -1,11 +1,13 @@
+from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from fast_zero.database import get_session
 from fast_zero.models import Patient, User
-from fast_zero.schemas import PatientFilter, PatientList, PatientPublic, PatientSchema
+from fast_zero.schemas import Message, PatientFilter, PatientList, PatientPublic, PatientSchema
 from fast_zero.security import get_current_user
 
 router = APIRouter(prefix='/patients', tags=['patients'])
@@ -70,3 +72,18 @@ def list_patients(
 
     patients = session.scalars(query.offset(filters.offset).limit(filters.limit)).all()
     return {'patients': patients}
+
+
+@router.delete('/{patient_id}', response_model=Message)
+def delete_patient(patient_id: int, session: T_Session, user: CurrentUser):
+    patient = session.scalar(
+        select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id)
+    )
+
+    if not patient:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
+
+    session.delete(patient)
+    session.commit()
+
+    return {'message': 'Task has been deleted successfully.'}
