@@ -44,7 +44,6 @@ def list_patients(
     user: CurrentUser,
     filters: PatientFilter = Depends(),
 ):
-    
     query = session.query(Patient).where(Patient.user_id == user.id)
 
     if filters.full_name:

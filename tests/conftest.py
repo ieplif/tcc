@@ -1,4 +1,5 @@
 import factory
+import factory.fuzzy
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -7,7 +8,7 @@ from sqlalchemy.pool import StaticPool
 
 from fast_zero.app import app
 from fast_zero.database import get_session
-from fast_zero.models import User, table_registry
+from fast_zero.models import Patient, User, table_registry
 from fast_zero.security import get_password_hash
 
 
@@ -18,6 +19,21 @@ class UserFactory(factory.Factory):
     username = factory.Sequence(lambda n: f'test{n}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
     password = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
+
+
+class PatientFactory(factory.Factory):
+    class Meta:
+        model = Patient
+
+    full_name = factory.Faker('text')
+    age = factory.Faker('random_int', min=10, max=99)
+    place_of_birth = factory.Faker('text')
+    marital_status = factory.Faker('text')
+    gender = factory.Faker('text')
+    profession = factory.Faker('text')
+    residential_address = factory.Faker('text')
+    commercial_address = factory.Faker('text')
+    user_id = 1
 
 
 @pytest.fixture()
