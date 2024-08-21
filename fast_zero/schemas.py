@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr
 
@@ -45,7 +45,7 @@ class PatientPublic(PatientSchema):
 
 
 class PatientList(BaseModel):
-    patients: list[PatientPublic]
+    patients: List[PatientPublic]
 
 
 class PatientFilter(BaseModel):
@@ -72,3 +72,31 @@ class PatientUpdate(BaseModel):
     commercial_address: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class ClinicalHistorySchema(BaseModel):
+    patient_id: int
+    main_complaint: str
+    disease_history: str
+    lifestyle_habits: str
+    previous_treatments: str
+    personal_family_history: str
+    other_information: Optional[str] = None
+
+
+class ClinicalHistoryPublic(ClinicalHistorySchema):
+    history_id: int
+
+
+class ClinicalHistoryList(BaseModel):
+    clinical_histories: List[ClinicalHistoryPublic]
+
+
+class ClinicalHistoryFilter(BaseModel):
+    patient_id: Optional[int] = None
+    main_complaint: Optional[str] = None
+    disease_history: Optional[str] = None
+    lifestyle_habits: Optional[str] = None
+    previous_treatments: Optional[str] = None
+    personal_family_history: Optional[str] = None
+    other_information: Optional[str] = None

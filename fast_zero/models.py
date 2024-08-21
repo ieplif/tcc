@@ -30,5 +30,19 @@ class Patient:
     profession: Mapped[str]
     residential_address: Mapped[str]
     commercial_address: Mapped[str]
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
 
+
+@table_registry.mapped_as_dataclass
+class ClinicalHistory:
+    __tablename__ = 'clinical_histories'
+
+    history_id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
+    main_complaint: Mapped[str]
+    disease_history: Mapped[str]
+    lifestyle_habits: Mapped[str]
+    previous_treatments: Mapped[str]
+    personal_family_history: Mapped[str]
+    other_information: Mapped[str] = None
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
