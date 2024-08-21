@@ -8,7 +8,7 @@ from sqlalchemy.pool import StaticPool
 
 from fast_zero.app import app
 from fast_zero.database import get_session
-from fast_zero.models import Patient, User, table_registry
+from fast_zero.models import ClinicalHistory, Patient, User, table_registry
 from fast_zero.security import get_password_hash
 
 
@@ -34,6 +34,20 @@ class PatientFactory(factory.Factory):
     residential_address = factory.Faker('text')
     commercial_address = factory.Faker('text')
     user_id = 1
+
+
+class ClinicalHistoryFactory(factory.Factory):
+    class Meta:
+        model = ClinicalHistory
+
+    main_complaint = factory.Faker('text')
+    disease_history = factory.Faker('text')
+    lifestyle_habits = factory.Faker('text')
+    previous_treatments = factory.Faker('text')
+    personal_family_history = factory.Faker('text')
+    other_information = factory.Faker('text')
+    user_id = 1
+    patient_id = 1
 
 
 @pytest.fixture()
@@ -95,3 +109,11 @@ def token(client, user):
         data={'username': user.email, 'password': user.clean_password},
     )
     return response.json()['access_token']
+
+
+@pytest.fixture()
+def patient(session):
+    patient = PatientFactory.create()
+    session.add(patient)
+    session.commit()
+    return patient

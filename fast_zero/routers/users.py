@@ -23,9 +23,7 @@ def read_users(session: T_Session, limit: int = 10, skip: int = 0):
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
 def create_user(user: UserSchema, session: T_Session):
-    db_user = session.scalar(
-        select(User).where((User.username == user.username) | (User.email == user.email))
-    )
+    db_user = session.scalar(select(User).where((User.username == user.username) | (User.email == user.email)))
 
     if db_user:
         if db_user.username == user.username:

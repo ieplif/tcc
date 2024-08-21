@@ -83,9 +83,7 @@ def list_patients(
 
 @router.delete('/{patient_id}', response_model=Message)
 def delete_patient(patient_id: int, session: T_Session, user: CurrentUser):
-    patient = session.scalar(
-        select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id)
-    )
+    patient = session.scalar(select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id))
 
     if not patient:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
@@ -98,9 +96,7 @@ def delete_patient(patient_id: int, session: T_Session, user: CurrentUser):
 
 @router.patch('/{patient_id}', response_model=PatientPublic)
 def patch_patient(patient_id: int, session: T_Session, user: CurrentUser, patient: PatientUpdate):
-    db_patient = session.scalar(
-        select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id)
-    )
+    db_patient = session.scalar(select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id))
 
     if not db_patient:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')

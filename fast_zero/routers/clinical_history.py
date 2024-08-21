@@ -5,7 +5,12 @@ from sqlalchemy.orm import Session
 
 from fast_zero.database import get_session
 from fast_zero.models import ClinicalHistory, User
-from fast_zero.schemas import ClinicalHistoryPublic, ClinicalHistorySchema
+from fast_zero.schemas import (
+    ClinicalHistoryFilter,
+    ClinicalHistoryList,
+    ClinicalHistoryPublic,
+    ClinicalHistorySchema,
+)
 from fast_zero.security import get_current_user
 
 router = APIRouter(prefix='/clinical-history', tags=['clinical-history'])
@@ -35,3 +40,4 @@ def create_clinical_history(
     session.refresh(db_clinical_history)
 
     return db_clinical_history
+

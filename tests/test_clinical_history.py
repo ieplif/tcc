@@ -1,3 +1,6 @@
+from tests.conftest import ClinicalHistoryFactory
+
+
 def test_create_clinical_history(client, token):
     response = client.post(
         '/clinical-history/',
@@ -23,3 +26,5 @@ def test_create_clinical_history(client, token):
         'personal_family_history': 'clinical_history personal_family_history',
         'other_information': 'clinical_history other_information',
     }
+
+

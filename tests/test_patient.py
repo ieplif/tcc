@@ -46,9 +46,7 @@ def test_list_patients_should_return_5_patients(session, client, user, token):
 
 def test_list_patients_filter_full_name_should_return_5_patients(session, client, user, token):
     expected_patients = 5
-    session.bulk_save_objects(
-        PatientFactory.create_batch(5, user_id=user.id, full_name='Maria Aparecida')
-    )
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id, full_name='Maria Aparecida'))
     session.commit()
 
     response = client.get(
@@ -74,9 +72,7 @@ def test_list_patients_filter_age_should_return_5_patients(session, client, user
 
 def test_list_patients_filter_place_of_birth_should_return_5_patients(session, client, user, token):
     expected_patients = 5
-    session.bulk_save_objects(
-        PatientFactory.create_batch(5, user_id=user.id, place_of_birth='Rio de Janeiro')
-    )
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id, place_of_birth='Rio de Janeiro'))
     session.commit()
 
     response = client.get(
@@ -93,9 +89,7 @@ def test_delete_patient(session, client, user, token):
     session.commit()
     session.refresh(patient)
 
-    response = client.delete(
-        f'/patients/{patient.id}', headers={'Authorization': f'Bearer {token}'}
-    )
+    response = client.delete(f'/patients/{patient.id}', headers={'Authorization': f'Bearer {token}'})
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'Task has been deleted successfully.'}

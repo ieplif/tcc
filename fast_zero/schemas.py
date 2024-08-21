@@ -100,3 +100,5 @@ class ClinicalHistoryFilter(BaseModel):
     previous_treatments: Optional[str] = None
     personal_family_history: Optional[str] = None
     other_information: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
