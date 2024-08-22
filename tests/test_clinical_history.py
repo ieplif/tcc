@@ -1,4 +1,4 @@
-from tests.conftest import ClinicalHistoryFactory
+from tests.conftest import ClinicalHistoryFactory, PatientFactory
 
 
 def test_create_clinical_history(client, token):
@@ -28,3 +28,133 @@ def test_create_clinical_history(client, token):
     }
 
 
+def test_list_clinical_history_should_return_5_clinical_history(session, client, user, patient, token):
+    expected_clinical_histories = 5
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, user_id=user.id, patient_id=patient.id))
+    session.commit()
+
+    response = client.get(
+        '/clinical-history/',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert len(response.json()['clinical_histories']) == expected_clinical_histories
+
+
+def test_list_clinical_history_filter_main_complaint_should_return_5_clinical_history(
+    session, client, user, patient, token
+):
+    expected_clinical_histories = 5
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
+    session.bulk_save_objects(
+        ClinicalHistoryFactory.create_batch(5, user_id=user.id, patient_id=patient.id, main_complaint='main_complaint')
+    )
+    session.commit()
+
+    response = client.get(
+        '/clinical-history/?main_complaint=main_complaint',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert len(response.json()['clinical_histories']) == expected_clinical_histories
+
+
+def test_list_clinical_history_filter_disease_history_should_return_5_clinical_history(
+    session, client, user, patient, token
+):
+    expected_clinical_histories = 5
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
+    session.bulk_save_objects(
+        ClinicalHistoryFactory.create_batch(
+            5, user_id=user.id, patient_id=patient.id, disease_history='disease_history'
+        )
+    )
+    session.commit()
+
+    response = client.get(
+        '/clinical-history/?disease_history=disease_history',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert len(response.json()['clinical_histories']) == expected_clinical_histories
+
+
+def test_list_clinical_history_filter_lifestyle_habits_should_return_5_clinical_history(
+    session, client, user, patient, token
+):
+    expected_clinical_histories = 5
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
+    session.bulk_save_objects(
+        ClinicalHistoryFactory.create_batch(
+            5, user_id=user.id, patient_id=patient.id, lifestyle_habits='lifestyle_habits'
+        )
+    )
+    session.commit()
+
+    response = client.get(
+        '/clinical-history/?lifestyle_habits=lifestyle_habits',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert len(response.json()['clinical_histories']) == expected_clinical_histories
+
+
+def test_list_clinical_history_filter_previous_treatments_should_return_5_clinical_history(
+    session, client, user, patient, token
+):
+    expected_clinical_histories = 5
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
+    session.bulk_save_objects(
+        ClinicalHistoryFactory.create_batch(
+            5, user_id=user.id, patient_id=patient.id, previous_treatments='previous_treatments'
+        )
+    )
+    session.commit()
+
+    response = client.get(
+        '/clinical-history/?previous_treatments=previous_treatments',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert len(response.json()['clinical_histories']) == expected_clinical_histories
+
+
+def test_list_clinical_history_filter_personal_family_history_should_return_5_clinical_history(
+    session, client, user, patient, token
+):
+    expected_clinical_histories = 5
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
+    session.bulk_save_objects(
+        ClinicalHistoryFactory.create_batch(
+            5, user_id=user.id, patient_id=patient.id, personal_family_history='personal_family_history'
+        )
+    )
+    session.commit()
+
+    response = client.get(
+        '/clinical-history/?personal_family_history=personal_family_history',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert len(response.json()['clinical_histories']) == expected_clinical_histories
+
+
+def test_list_clinical_history_filter_other_information_should_return_5_clinical_history(
+    session, client, user, patient, token
+):
+    expected_clinical_histories = 5
+    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
+    session.bulk_save_objects(
+        ClinicalHistoryFactory.create_batch(
+            5, user_id=user.id, patient_id=patient.id, other_information='other_information'
+        )
+    )
+    session.commit()
+
+    response = client.get(
+        '/clinical-history/?other_information=other_information',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert len(response.json()['clinical_histories']) == expected_clinical_histories
