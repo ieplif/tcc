@@ -134,3 +134,10 @@ class ClinicalExaminationFilter(BaseModel):
     exam_details: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class ClinicalExaminationUpdate(BaseModel):
+    patient_id: Optional[int] = None
+    exam_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None

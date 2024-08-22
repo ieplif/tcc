@@ -83,12 +83,12 @@ def delete_clinical_history(
     clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id, user_id=user.id).first()
 
     if not clinical_history:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Clinical History not found.')
 
     session.delete(clinical_history)
     session.commit()
 
-    return {'message': 'Task has been deleted successfully.'}
+    return {'message': 'Clinical History has been deleted successfully.'}
 
 
 @router.patch('/{history_id}', response_model=ClinicalHistoryPublic)
@@ -101,7 +101,7 @@ def patch_clinical_history(
     db_clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id, user_id=user.id).first()
 
     if not db_clinical_history:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Clinical History not found.')
 
     for key, value in clinical_history.model_dump(exclude_unset=True).items():
         setattr(db_clinical_history, key, value)

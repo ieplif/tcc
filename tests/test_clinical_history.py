@@ -171,16 +171,16 @@ def test_delete_clinical_history(session, client, user, token):
     response = client.delete(
         f'/clinical-history/{clinical_history.history_id}', headers={'Authorization': f'Bearer {token}'}
     )
-    print(response.json())
+
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {'message': 'Task has been deleted successfully.'}
+    assert response.json() == {'message': 'Clinical History has been deleted successfully.'}
 
 
 def test_delete_clinical_history_error(client, token):
     response = client.delete(f'/clinical-history/{10}', headers={'Authorization': f'Bearer {token}'})
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Task not found.'}
+    assert response.json() == {'detail': 'Clinical History not found.'}
 
 
 def test_patch_clinical_history(session, client, user, token):
@@ -208,4 +208,4 @@ def test_patch_clinic_history_error(client, token):
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Task not found.'}
+    assert response.json() == {'detail': 'Clinical History not found.'}
