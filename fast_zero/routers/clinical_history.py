@@ -11,6 +11,7 @@ from fast_zero.schemas import (
     ClinicalHistoryList,
     ClinicalHistoryPublic,
     ClinicalHistorySchema,
+    ClinicalHistoryUpdate,
     Message,
     PatientFilter,
 )
@@ -88,3 +89,25 @@ def delete_clinical_history(
     session.commit()
 
     return {'message': 'Task has been deleted successfully.'}
+
+
+@router.patch('/{history_id}', response_model=ClinicalHistoryPublic)
+def patch_clinical_history(
+    history_id: int,
+    clinical_history: ClinicalHistoryUpdate,
+    session: T_Session,
+    user: CurrentUser,
+):
+    db_clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id, user_id=user.id).first()
+
+    if not db_clinical_history:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
+
+    for key, value in clinical_history.model_dump(exclude_unset=True).items():
+        setattr(db_clinical_history, key, value)
+
+    session.add(db_clinical_history)
+    session.commit()
+    session.refresh(db_clinical_history)
+
+    return db_clinical_history

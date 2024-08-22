@@ -102,3 +102,15 @@ class ClinicalHistoryFilter(BaseModel):
     other_information: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class ClinicalHistoryUpdate(BaseModel):
+    patient_id: Optional[int] = None
+    main_complaint: Optional[str] = None
+    disease_history: Optional[str] = None
+    lifestyle_habits: Optional[str] = None
+    previous_treatments: Optional[str] = None
+    personal_family_history: Optional[str] = None
+    other_information: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None

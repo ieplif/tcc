@@ -171,13 +171,41 @@ def test_delete_clinical_history(session, client, user, token):
     response = client.delete(
         f'/clinical-history/{clinical_history.history_id}', headers={'Authorization': f'Bearer {token}'}
     )
-
+    print(response.json())
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'Task has been deleted successfully.'}
 
 
 def test_delete_clinical_history_error(client, token):
     response = client.delete(f'/clinical-history/{10}', headers={'Authorization': f'Bearer {token}'})
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Task not found.'}
+
+
+def test_patch_clinical_history(session, client, user, token):
+    clinical_history = ClinicalHistoryFactory(user_id=user.id)
+
+    session.add(clinical_history)
+    session.commit()
+    session.refresh(clinical_history)
+
+    response = client.patch(
+        f'/clinical-history/{clinical_history.history_id}',
+        json={'main_complaint': 'Dor pélvica'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json()['main_complaint'] == 'Dor pélvica'
+
+
+def test_patch_clinic_history_error(client, token):
+    response = client.patch(
+        '/clinical-history/10',
+        json={},
+        headers={'Authorization': f'Bearer {token}'},
+    )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert response.json() == {'detail': 'Task not found.'}
