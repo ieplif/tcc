@@ -1,6 +1,7 @@
+from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from fast_zero.database import get_session
@@ -10,6 +11,7 @@ from fast_zero.schemas import (
     ClinicalHistoryList,
     ClinicalHistoryPublic,
     ClinicalHistorySchema,
+    Message,
     PatientFilter,
 )
 from fast_zero.security import get_current_user
@@ -69,3 +71,20 @@ def list_clinical_histories(
         query = query.filter(ClinicalHistory.other_information.ilike(f'%{filters.other_information}%'))
 
     return {'clinical_histories': query.all()}
+
+
+@router.delete('/{history_id}', response_model=Message)
+def delete_clinical_history(
+    history_id: int,
+    session: T_Session,
+    user: CurrentUser,
+):
+    clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id, user_id=user.id).first()
+
+    if not clinical_history:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
+
+    session.delete(clinical_history)
+    session.commit()
+
+    return {'message': 'Task has been deleted successfully.'}
