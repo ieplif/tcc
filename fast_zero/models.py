@@ -46,3 +46,13 @@ class ClinicalHistory:
     personal_family_history: Mapped[str]
     other_information: Mapped[str] = None
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+
+
+@table_registry.mapped_as_dataclass
+class ClinicalExamination:
+    __tablename__ = 'clinical_examinations'
+
+    exam_id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
+    exam_details: Mapped[str]
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))

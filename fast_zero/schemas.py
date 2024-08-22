@@ -114,3 +114,23 @@ class ClinicalHistoryUpdate(BaseModel):
     other_information: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class ClinicalExaminationSchema(BaseModel):
+    patient_id: int
+    exam_details: str
+
+
+class ClinicalExaminationPublic(ClinicalExaminationSchema):
+    exam_id: int
+
+
+class ClinicalExaminationList(BaseModel):
+    clinical_examinations: List[ClinicalExaminationPublic]
+
+
+class ClinicalExaminationFilter(BaseModel):
+    patient_id: Optional[int] = None
+    exam_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
