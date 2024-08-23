@@ -42,7 +42,6 @@ def create_clinical_examination(
 @router.get('/', response_model=ClinicalExaminationList)
 def list_clinical_examinations(
     session: T_Session,
-    patient: CurrentPatient,
     filters: ClinicalExaminationFilter = Depends(),
 ):
     query = session.query(ClinicalExamination)

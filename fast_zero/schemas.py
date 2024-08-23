@@ -21,7 +21,7 @@ class UserPublic(BaseModel):
 
 
 class UserList(BaseModel):
-    users: list[UserPublic]
+    users: List[UserPublic]
 
 
 class Token(BaseModel):
@@ -138,6 +138,33 @@ class ClinicalExaminationFilter(BaseModel):
 
 
 class ClinicalExaminationUpdate(BaseModel):
+    patient_id: Optional[int] = None
+    exam_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
+
+
+class ComplementaryExamsSchema(BaseModel):
+    patient_id: int
+    exam_details: str
+
+
+class ComplementaryExamsPublic(ComplementaryExamsSchema):
+    exam_id: int
+
+
+class ComplementaryExamsList(BaseModel):
+    complementary_exams: List[ComplementaryExamsPublic]
+
+
+class ComplementaryExamsFilter(BaseModel):
+    patient_id: Optional[int] = None
+    exam_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
+
+
+class ComplementaryExamsUpdate(BaseModel):
     patient_id: Optional[int] = None
     exam_details: Optional[str] = None
     offset: Optional[int] = None

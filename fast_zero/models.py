@@ -53,3 +53,12 @@ class ClinicalExamination:
     exam_id: Mapped[int] = mapped_column(init=False, primary_key=True)
     patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
     exam_details: Mapped[str]
+
+
+@table_registry.mapped_as_dataclass
+class ComplementaryExam:
+    __tablename__ = 'complementary_exams'
+
+    exam_id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
+    exam_details: Mapped[str]
