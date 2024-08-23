@@ -169,3 +169,30 @@ class ComplementaryExamsUpdate(BaseModel):
     exam_details: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class PhysiotherapyDiagnosisSchema(BaseModel):
+    patient_id: int
+    diagnosis_details: str
+
+
+class PhysiotherapyDiagnosisPublic(PhysiotherapyDiagnosisSchema):
+    diagnosis_id: int
+
+
+class PhysiotherapyDiagnosisList(BaseModel):
+    physiotherapy_diagnosis: List[PhysiotherapyDiagnosisPublic]
+
+
+class PhysiotherapyDiagnosisFilter(BaseModel):
+    patient_id: Optional[int] = None
+    diagnosis_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
+
+
+class PhysiotherapyDiagnosisUpdate(BaseModel):
+    patient_id: Optional[int] = None
+    diagnosis_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
