@@ -65,3 +65,41 @@ def test_delete_complementary_exam(session, client, token):
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'Complementary Exam has been deleted successfully.'}
+
+
+def test_delete_complementary_exam_error(client, token):
+    response = client.delete(
+        '/complementary_exam/1',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Not Found'}
+
+
+def test_patch_complementary_exam(session, client, token):
+    complementary_exam = ComplementaryExamFactory()
+
+    session.add(complementary_exam)
+    session.commit()
+    session.refresh(complementary_exam)
+
+    response = client.patch(
+        f'/complementary_exams/{complementary_exam.exam_id}',
+        json={'exam_details': 'complementary_exam exam_details'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json()['exam_details'] == 'complementary_exam exam_details'
+
+
+def test_patch_complementary_exam_error(client, token):
+    response = client.patch(
+        '/complementary_exams/10',
+        json={},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Exam not found.'}

@@ -10,6 +10,7 @@ from fast_zero.schemas import (
     ComplementaryExamsList,
     ComplementaryExamsPublic,
     ComplementaryExamsSchema,
+    ComplementaryExamsUpdate,
     Message,
 )
 from fast_zero.security import get_session
@@ -65,3 +66,24 @@ def delete_complementary_exam(
     session.commit()
 
     return {'message': 'Complementary Exam has been deleted successfully.'}
+
+
+@router.patch('/{exam_id}', response_model=ComplementaryExamsPublic)
+def update_complementary_exam(
+    exam_id: int,
+    complementary_exam: ComplementaryExamsUpdate,
+    session: T_Session,
+):
+    db_complementary_exam = session.query(ComplementaryExam).filter_by(exam_id=exam_id).first()
+
+    if not db_complementary_exam:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Exam not found.')
+
+    for key, value in complementary_exam.model_dump(exclude_unset=True).items():
+        setattr(db_complementary_exam, key, value)
+
+    session.add(db_complementary_exam)
+    session.commit()
+    session.refresh(db_complementary_exam)
+
+    return db_complementary_exam
