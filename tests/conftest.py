@@ -33,7 +33,6 @@ class PatientFactory(factory.Factory):
     profession = factory.Faker('text')
     residential_address = factory.Faker('text')
     commercial_address = factory.Faker('text')
-    user_id = 1
 
 
 class ClinicalHistoryFactory(factory.Factory):
@@ -46,7 +45,6 @@ class ClinicalHistoryFactory(factory.Factory):
     previous_treatments = factory.Faker('text')
     personal_family_history = factory.Faker('text')
     other_information = factory.Faker('text')
-    user_id = 1
     patient_id = 1
 
 
@@ -55,7 +53,6 @@ class ClinicalExaminationFactory(factory.Factory):
         model = ClinicalExamination
 
     exam_details = factory.Faker('text')
-    user_id = 1
     patient_id = 1
 
 

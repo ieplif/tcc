@@ -20,10 +20,14 @@ def test_create_clinical_examination(client, token):
     }
 
 
-def test_list_clinical_examinations_should_return_5_clinical_examinations(session, client, user, patient, token):
+def test_list_clinical_examinations_should_return_5_clinical_examinations(session, client, token):
     expected_clinical_examinations = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(ClinicalExaminationFactory.create_batch(5, user_id=user.id, patient_id=patient.id))
+    session.bulk_save_objects(
+        PatientFactory.create_batch(
+            5,
+        )
+    )
+    session.bulk_save_objects(ClinicalExaminationFactory.create_batch(5))
     session.commit()
 
     response = client.get(
@@ -34,14 +38,10 @@ def test_list_clinical_examinations_should_return_5_clinical_examinations(sessio
     assert len(response.json()['clinical_examinations']) == expected_clinical_examinations
 
 
-def test_list_clinical_examinations_filter_exam_details_should_return_5_clinical_examinations(
-    session, client, user, patient, token
-):
+def test_list_clinical_examinations_filter_exam_details_should_return_5_clinical_examinations(session, client, token):
     expected_clinical_examinations = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(
-        ClinicalExaminationFactory.create_batch(5, user_id=user.id, patient_id=patient.id, exam_details='exam_details')
-    )
+    session.bulk_save_objects(PatientFactory.create_batch(5))
+    session.bulk_save_objects(ClinicalExaminationFactory.create_batch(5, exam_details='exam_details'))
     session.commit()
 
     response = client.get(
@@ -52,8 +52,8 @@ def test_list_clinical_examinations_filter_exam_details_should_return_5_clinical
     assert len(response.json()['clinical_examinations']) == expected_clinical_examinations
 
 
-def test_delete_clinical_examination(session, client, user, token):
-    clinical_examination = ClinicalExaminationFactory(user_id=user.id)
+def test_delete_clinical_examination(session, client, token):
+    clinical_examination = ClinicalExaminationFactory()
     session.add(clinical_examination)
     session.commit()
     session.refresh(clinical_examination)
@@ -77,8 +77,8 @@ def test_delete_clinical_examination_error(client, token):
     assert response.json() == {'detail': 'Exam not found.'}
 
 
-def test_patch_clinical_examination(session, client, user, token):
-    clinical_examination = ClinicalExaminationFactory(user_id=user.id)
+def test_patch_clinical_examination(session, client, token):
+    clinical_examination = ClinicalExaminationFactory()
 
     session.add(clinical_examination)
     session.commit()

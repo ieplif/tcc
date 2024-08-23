@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from fast_zero.database import get_session
-from fast_zero.models import ClinicalHistory, User
+from fast_zero.models import ClinicalHistory
 from fast_zero.schemas import (
     ClinicalHistoryFilter,
     ClinicalHistoryList,
@@ -15,12 +15,10 @@ from fast_zero.schemas import (
     Message,
     PatientFilter,
 )
-from fast_zero.security import get_current_user
 
 router = APIRouter(prefix='/clinical-history', tags=['clinical-history'])
 
 T_Session = Annotated[Session, Depends(get_session)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
 CurrentPatient = Annotated[PatientFilter, Depends()]
 
 
@@ -28,7 +26,6 @@ CurrentPatient = Annotated[PatientFilter, Depends()]
 def create_clinical_history(
     clinical_history: ClinicalHistorySchema,
     session: T_Session,
-    user: CurrentUser,
 ):
     db_clinical_history = ClinicalHistory(
         patient_id=clinical_history.patient_id,
@@ -38,7 +35,6 @@ def create_clinical_history(
         previous_treatments=clinical_history.previous_treatments,
         personal_family_history=clinical_history.personal_family_history,
         other_information=clinical_history.other_information,
-        user_id=user.id,
     )
     session.add(db_clinical_history)
     session.commit()
@@ -50,13 +46,9 @@ def create_clinical_history(
 @router.get('/', response_model=ClinicalHistoryList)
 def list_clinical_histories(
     session: T_Session,
-    user: CurrentUser,
-    patient: CurrentPatient,
     filters: ClinicalHistoryFilter = Depends(),
 ):
-    query = session.query(ClinicalHistory).where(
-        ClinicalHistory.user_id == user.id and ClinicalHistory.patient_id == patient.id
-    )
+    query = session.query(ClinicalHistory)
 
     if filters.main_complaint:
         query = query.filter(ClinicalHistory.main_complaint.ilike(f'%{filters.main_complaint}%'))
@@ -78,9 +70,8 @@ def list_clinical_histories(
 def delete_clinical_history(
     history_id: int,
     session: T_Session,
-    user: CurrentUser,
 ):
-    clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id, user_id=user.id).first()
+    clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id).first()
 
     if not clinical_history:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Clinical History not found.')
@@ -96,9 +87,8 @@ def patch_clinical_history(
     history_id: int,
     clinical_history: ClinicalHistoryUpdate,
     session: T_Session,
-    user: CurrentUser,
 ):
-    db_clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id, user_id=user.id).first()
+    db_clinical_history = session.query(ClinicalHistory).filter_by(history_id=history_id).first()
 
     if not db_clinical_history:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Clinical History not found.')

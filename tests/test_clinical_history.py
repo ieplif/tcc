@@ -30,10 +30,9 @@ def test_create_clinical_history(client, token):
     }
 
 
-def test_list_clinical_history_should_return_5_clinical_history(session, client, user, patient, token):
+def test_list_clinical_history_should_return_5_clinical_history(session, client, token):
     expected_clinical_histories = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, user_id=user.id, patient_id=patient.id))
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5))
     session.commit()
 
     response = client.get(
@@ -44,14 +43,9 @@ def test_list_clinical_history_should_return_5_clinical_history(session, client,
     assert len(response.json()['clinical_histories']) == expected_clinical_histories
 
 
-def test_list_clinical_history_filter_main_complaint_should_return_5_clinical_history(
-    session, client, user, patient, token
-):
+def test_list_clinical_history_filter_main_complaint_should_return_5_clinical_history(session, client, token):
     expected_clinical_histories = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(
-        ClinicalHistoryFactory.create_batch(5, user_id=user.id, patient_id=patient.id, main_complaint='main_complaint')
-    )
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, main_complaint='main_complaint'))
     session.commit()
 
     response = client.get(
@@ -62,16 +56,9 @@ def test_list_clinical_history_filter_main_complaint_should_return_5_clinical_hi
     assert len(response.json()['clinical_histories']) == expected_clinical_histories
 
 
-def test_list_clinical_history_filter_disease_history_should_return_5_clinical_history(
-    session, client, user, patient, token
-):
+def test_list_clinical_history_filter_disease_history_should_return_5_clinical_history(session, client, token):
     expected_clinical_histories = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(
-        ClinicalHistoryFactory.create_batch(
-            5, user_id=user.id, patient_id=patient.id, disease_history='disease_history'
-        )
-    )
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, disease_history='disease_history'))
     session.commit()
 
     response = client.get(
@@ -82,16 +69,9 @@ def test_list_clinical_history_filter_disease_history_should_return_5_clinical_h
     assert len(response.json()['clinical_histories']) == expected_clinical_histories
 
 
-def test_list_clinical_history_filter_lifestyle_habits_should_return_5_clinical_history(
-    session, client, user, patient, token
-):
+def test_list_clinical_history_filter_lifestyle_habits_should_return_5_clinical_history(session, client, token):
     expected_clinical_histories = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(
-        ClinicalHistoryFactory.create_batch(
-            5, user_id=user.id, patient_id=patient.id, lifestyle_habits='lifestyle_habits'
-        )
-    )
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, lifestyle_habits='lifestyle_habits'))
     session.commit()
 
     response = client.get(
@@ -102,16 +82,9 @@ def test_list_clinical_history_filter_lifestyle_habits_should_return_5_clinical_
     assert len(response.json()['clinical_histories']) == expected_clinical_histories
 
 
-def test_list_clinical_history_filter_previous_treatments_should_return_5_clinical_history(
-    session, client, user, patient, token
-):
+def test_list_clinical_history_filter_previous_treatments_should_return_5_clinical_history(session, client, token):
     expected_clinical_histories = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(
-        ClinicalHistoryFactory.create_batch(
-            5, user_id=user.id, patient_id=patient.id, previous_treatments='previous_treatments'
-        )
-    )
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, previous_treatments='previous_treatments'))
     session.commit()
 
     response = client.get(
@@ -122,16 +95,10 @@ def test_list_clinical_history_filter_previous_treatments_should_return_5_clinic
     assert len(response.json()['clinical_histories']) == expected_clinical_histories
 
 
-def test_list_clinical_history_filter_personal_family_history_should_return_5_clinical_history(
-    session, client, user, patient, token
-):
+def test_list_clinical_history_filter_personal_family_history_should_return_5_clinical_history(session, client, token):
     expected_clinical_histories = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(
-        ClinicalHistoryFactory.create_batch(
-            5, user_id=user.id, patient_id=patient.id, personal_family_history='personal_family_history'
-        )
-    )
+    session.bulk_save_objects(PatientFactory.create_batch(5))
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, personal_family_history='personal_family_history'))
     session.commit()
 
     response = client.get(
@@ -142,16 +109,9 @@ def test_list_clinical_history_filter_personal_family_history_should_return_5_cl
     assert len(response.json()['clinical_histories']) == expected_clinical_histories
 
 
-def test_list_clinical_history_filter_other_information_should_return_5_clinical_history(
-    session, client, user, patient, token
-):
+def test_list_clinical_history_filter_other_information_should_return_5_clinical_history(session, client, token):
     expected_clinical_histories = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.bulk_save_objects(
-        ClinicalHistoryFactory.create_batch(
-            5, user_id=user.id, patient_id=patient.id, other_information='other_information'
-        )
-    )
+    session.bulk_save_objects(ClinicalHistoryFactory.create_batch(5, other_information='other_information'))
     session.commit()
 
     response = client.get(
@@ -162,8 +122,8 @@ def test_list_clinical_history_filter_other_information_should_return_5_clinical
     assert len(response.json()['clinical_histories']) == expected_clinical_histories
 
 
-def test_delete_clinical_history(session, client, user, token):
-    clinical_history = ClinicalHistoryFactory(user_id=user.id)
+def test_delete_clinical_history(session, client, token):
+    clinical_history = ClinicalHistoryFactory()
     session.add(clinical_history)
     session.commit()
     session.refresh(clinical_history)
@@ -183,8 +143,8 @@ def test_delete_clinical_history_error(client, token):
     assert response.json() == {'detail': 'Clinical History not found.'}
 
 
-def test_patch_clinical_history(session, client, user, token):
-    clinical_history = ClinicalHistoryFactory(user_id=user.id)
+def test_patch_clinical_history(session, client, token):
+    clinical_history = ClinicalHistoryFactory()
 
     session.add(clinical_history)
     session.commit()

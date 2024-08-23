@@ -31,22 +31,9 @@ def test_create_patient(client, token):
     }
 
 
-def test_list_patients_should_return_5_patients(session, client, user, token):
+def test_list_patients_filter_full_name_should_return_5_patients(session, client, token):
     expected_patients = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id))
-    session.commit()
-
-    response = client.get(
-        '/patients',
-        headers={'Authorization': f'Bearer {token}'},
-    )
-
-    assert len(response.json()['patients']) == expected_patients
-
-
-def test_list_patients_filter_full_name_should_return_5_patients(session, client, user, token):
-    expected_patients = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id, full_name='Maria Aparecida'))
+    session.bulk_save_objects(PatientFactory.create_batch(5, full_name='Maria Aparecida'))
     session.commit()
 
     response = client.get(
@@ -57,9 +44,9 @@ def test_list_patients_filter_full_name_should_return_5_patients(session, client
     assert len(response.json()['patients']) == expected_patients
 
 
-def test_list_patients_filter_age_should_return_5_patients(session, client, user, token):
+def test_list_patients_filter_age_should_return_5_patients(session, client, token):
     expected_patients = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id, age=58))
+    session.bulk_save_objects(PatientFactory.create_batch(5, age=58))
     session.commit()
 
     response = client.get(
@@ -70,9 +57,9 @@ def test_list_patients_filter_age_should_return_5_patients(session, client, user
     assert len(response.json()['patients']) == expected_patients
 
 
-def test_list_patients_filter_place_of_birth_should_return_5_patients(session, client, user, token):
+def test_list_patients_filter_place_of_birth_should_return_5_patients(session, client, token):
     expected_patients = 5
-    session.bulk_save_objects(PatientFactory.create_batch(5, user_id=user.id, place_of_birth='Rio de Janeiro'))
+    session.bulk_save_objects(PatientFactory.create_batch(5, place_of_birth='Rio de Janeiro'))
     session.commit()
 
     response = client.get(
@@ -83,8 +70,8 @@ def test_list_patients_filter_place_of_birth_should_return_5_patients(session, c
     assert len(response.json()['patients']) == expected_patients
 
 
-def test_delete_patient(session, client, user, token):
-    patient = PatientFactory(user_id=user.id)
+def test_delete_patient(session, client, token):
+    patient = PatientFactory()
     session.add(patient)
     session.commit()
     session.refresh(patient)
@@ -102,8 +89,8 @@ def test_delete_patient_error(client, token):
     assert response.json() == {'detail': 'Task not found.'}
 
 
-def test_patch_patient(session, client, user, token):
-    patient = PatientFactory(user_id=user.id)
+def test_patch_patient(session, client, token):
+    patient = PatientFactory()
 
     session.add(patient)
     session.commit()

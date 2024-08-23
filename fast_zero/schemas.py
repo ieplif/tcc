@@ -49,6 +49,7 @@ class PatientList(BaseModel):
 
 
 class PatientFilter(BaseModel):
+    id: Optional[int] = None
     full_name: Optional[str] = None
     age: Optional[int] = None
     place_of_birth: Optional[str] = None

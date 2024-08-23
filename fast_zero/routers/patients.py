@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from fast_zero.database import get_session
-from fast_zero.models import Patient, User
+from fast_zero.models import Patient
 from fast_zero.schemas import (
     Message,
     PatientFilter,
@@ -15,19 +15,16 @@ from fast_zero.schemas import (
     PatientSchema,
     PatientUpdate,
 )
-from fast_zero.security import get_current_user
 
 router = APIRouter(prefix='/patients', tags=['patients'])
 
 T_Session = Annotated[Session, Depends(get_session)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @router.post('/', response_model=PatientPublic)
 def create_patient(
     patient: PatientSchema,
     session: T_Session,
-    user: CurrentUser,
 ):
     db_patient = Patient(
         full_name=patient.full_name,
@@ -38,7 +35,6 @@ def create_patient(
         profession=patient.profession,
         residential_address=patient.residential_address,
         commercial_address=patient.commercial_address,
-        user_id=user.id,
     )
     session.add(db_patient)
     session.commit()
@@ -50,10 +46,9 @@ def create_patient(
 @router.get('/', response_model=PatientList)
 def list_patients(
     session: T_Session,
-    user: CurrentUser,
     filters: PatientFilter = Depends(),
 ):
-    query = session.query(Patient).where(Patient.user_id == user.id)
+    query = session.query(Patient)
 
     if filters.full_name:
         query = query.filter(Patient.full_name.ilike(f'%{filters.full_name}%'))
@@ -82,8 +77,8 @@ def list_patients(
 
 
 @router.delete('/{patient_id}', response_model=Message)
-def delete_patient(patient_id: int, session: T_Session, user: CurrentUser):
-    patient = session.scalar(select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id))
+def delete_patient(patient_id: int, session: T_Session):
+    patient = session.scalar(select(Patient).where(Patient.id == patient_id))
 
     if not patient:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
@@ -95,8 +90,8 @@ def delete_patient(patient_id: int, session: T_Session, user: CurrentUser):
 
 
 @router.patch('/{patient_id}', response_model=PatientPublic)
-def patch_patient(patient_id: int, session: T_Session, user: CurrentUser, patient: PatientUpdate):
-    db_patient = session.scalar(select(Patient).where(Patient.user_id == user.id, Patient.id == patient_id))
+def patch_patient(patient_id: int, session: T_Session, patient: PatientUpdate):
+    db_patient = session.scalar(select(Patient).where(Patient.id == patient_id))
 
     if not db_patient:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Task not found.')
