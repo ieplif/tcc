@@ -196,3 +196,30 @@ class PhysiotherapyDiagnosisUpdate(BaseModel):
     diagnosis_details: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class PrognosisSchema(BaseModel):
+    patient_id: int
+    prognosis_details: str
+
+
+class PrognosisPublic(PrognosisSchema):
+    prognosis_id: int
+
+
+class PrognosisList(BaseModel):
+    prognosis: List[PrognosisPublic]
+
+
+class PrognosisFilter(BaseModel):
+    patient_id: Optional[int] = None
+    prognosis_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
+
+
+class PrognosisUpdate(BaseModel):
+    patient_id: Optional[int] = None
+    prognosis_details: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None

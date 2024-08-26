@@ -14,6 +14,7 @@ from fast_zero.models import (
     ComplementaryExam,
     Patient,
     PhysiotherapyDiagosis,
+    Prognosis,
     User,
     table_registry,
 )
@@ -77,6 +78,14 @@ class PhysiotherapyDiagnosisFactory(factory.Factory):
         model = PhysiotherapyDiagosis
 
     diagnosis_details = factory.Faker('text')
+    patient_id = 1
+
+
+class PrognosisFactory(factory.Factory):
+    class Meta:
+        model = Prognosis
+
+    prognosis_details = factory.Faker('text')
     patient_id = 1
 
 

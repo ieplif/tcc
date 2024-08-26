@@ -71,3 +71,12 @@ class PhysiotherapyDiagosis:
     diagnosis_id: Mapped[int] = mapped_column(init=False, primary_key=True)
     patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
     diagnosis_details: Mapped[str]
+
+
+@table_registry.mapped_as_dataclass
+class Prognosis:
+    __tablename__ = 'prognosis'
+
+    prognosis_id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
+    prognosis_details: Mapped[str]
