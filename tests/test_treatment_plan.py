@@ -59,3 +59,17 @@ def test_list_treatment_plans_filter_procedures_should_return_5_treatment_plans(
     )
 
     assert len(response.json()['treatment_plans']) == expected_treatment_plans
+
+
+def test_delete_treatment_plan(session, client, token):
+    treatment_plan = TreatmentPlanFactory()
+    session.add(treatment_plan)
+    session.commit()
+    session.refresh(treatment_plan)
+
+    response = client.delete(
+        f'/treatment-plan/{treatment_plan.plan_id}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.json() == {'message': 'Treatment plan deleted successfully'}

@@ -1,10 +1,12 @@
+from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from fast_zero.models import TreatmentPlan
 from fast_zero.schemas import (
+    Message,
     PatientFilter,
     TreatmentPlanFilter,
     TreatmentPlanList,
@@ -56,3 +58,19 @@ def list_treatment_plans(
     treatment_plans = query.all()
 
     return {'treatment_plans': treatment_plans}
+
+
+@router.delete('/{plan_id}', response_model=Message)
+def delete_treatment_plan(
+    plan_id: int,
+    session: T_Session,
+):
+    treatment_plan = session.query(TreatmentPlan).filter_by(plan_id=plan_id).first()
+
+    if not treatment_plan:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Treatment plan not found')
+
+    session.delete(treatment_plan)
+    session.commit()
+
+    return {'message': 'Treatment plan deleted successfully'}
