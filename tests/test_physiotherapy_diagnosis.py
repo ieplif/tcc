@@ -5,7 +5,7 @@ from tests.conftest import PatientFactory, PhysiotherapyDiagnosisFactory
 
 def test_create_physiotherapy_diagnosis(client, token):
     response = client.post(
-        '/physiotherapy_diagnosis/',
+        '/physiotherapy-diagnosis/',
         headers={'Authorization': f'Bearer {token}'},
         json={
             'patient_id': 1,
@@ -31,7 +31,7 @@ def test_list_physiotherapy_diagnosis_should_return_5_physiotherapy_diagnosis(se
     session.commit()
 
     response = client.get(
-        '/physiotherapy_diagnosis/',
+        '/physiotherapy-diagnosis/',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -47,7 +47,7 @@ def test_list_physiotherapy_diagnosis_filter_diagnosis_details_should_return_5_p
     session.commit()
 
     response = client.get(
-        '/physiotherapy_diagnosis/?diagnosis_details=diagnosis_details',
+        '/physiotherapy-diagnosis/?diagnosis_details=diagnosis_details',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -61,7 +61,7 @@ def test_delete_physiotherapy_diagnosis(session, client, token):
     session.refresh(physiotherapy_diagnosis)
 
     response = client.delete(
-        f'/physiotherapy_diagnosis/{physiotherapy_diagnosis.diagnosis_id}',
+        f'/physiotherapy-diagnosis/{physiotherapy_diagnosis.diagnosis_id}',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -71,7 +71,7 @@ def test_delete_physiotherapy_diagnosis(session, client, token):
 
 def test_delete_physiotherapy_diagnosis_error(client, token):
     response = client.delete(
-        '/physiotherapy_diagnosis/1',
+        '/physiotherapy-diagnosis/1',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -87,7 +87,7 @@ def test_patch_physiotherapy_diagnosis(session, client, token):
     session.refresh(physiotherapy_diagnosis)
 
     response = client.patch(
-        f'/physiotherapy_diagnosis/{physiotherapy_diagnosis.diagnosis_id}',
+        f'/physiotherapy-diagnosis/{physiotherapy_diagnosis.diagnosis_id}',
         json={'diagnosis_details': 'physiotherapy_diagnosis diagnosis_details'},
         headers={'Authorization': f'Bearer {token}'},
     )
@@ -98,7 +98,7 @@ def test_patch_physiotherapy_diagnosis(session, client, token):
 
 def test_patch_physiotherapy_diagnosis_error(client, token):
     response = client.patch(
-        '/physiotherapy_diagnosis/10',
+        '/physiotherapy-diagnosis/10',
         json={},
         headers={'Authorization': f'Bearer {token}'},
     )

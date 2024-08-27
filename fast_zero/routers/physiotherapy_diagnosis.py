@@ -15,7 +15,7 @@ from fast_zero.schemas import (
 )
 from fast_zero.security import get_session
 
-router = APIRouter(prefix='/physiotherapy_diagnosis', tags=['physiotherapy_diagnosis'])
+router = APIRouter(prefix='/physiotherapy-diagnosis', tags=['physiotherapy-diagnosis'])
 
 T_Session = Annotated[Session, Depends(get_session)]
 

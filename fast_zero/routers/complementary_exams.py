@@ -15,7 +15,7 @@ from fast_zero.schemas import (
 )
 from fast_zero.security import get_session
 
-router = APIRouter(prefix='/complementary_exams', tags=['complementary_exams'])
+router = APIRouter(prefix='/complementary-exams', tags=['complementary-exams'])
 
 T_Session = Annotated[Session, Depends(get_session)]
 

@@ -5,7 +5,7 @@ from tests.conftest import ComplementaryExamFactory, PatientFactory
 
 def test_create_complementary_exam(client, token):
     response = client.post(
-        '/complementary_exams/',
+        '/complementary-exams/',
         headers={'Authorization': f'Bearer {token}'},
         json={
             'patient_id': 1,
@@ -31,7 +31,7 @@ def test_list_complementary_exams_should_return_5_complementary_exams(session, c
     session.commit()
 
     response = client.get(
-        '/complementary_exams/',
+        '/complementary-exams/',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -45,7 +45,7 @@ def test_list_complementary_exams_filter_exam_details_should_return_5_complement
     session.commit()
 
     response = client.get(
-        '/complementary_exams/?exam_details=exam_details',
+        '/complementary-exams/?exam_details=exam_details',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -59,7 +59,7 @@ def test_delete_complementary_exam(session, client, token):
     session.refresh(complementary_exam)
 
     response = client.delete(
-        f'/complementary_exams/{complementary_exam.exam_id}',
+        f'/complementary-exams/{complementary_exam.exam_id}',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -69,7 +69,7 @@ def test_delete_complementary_exam(session, client, token):
 
 def test_delete_complementary_exam_error(client, token):
     response = client.delete(
-        '/complementary_exam/1',
+        '/complementary-exam/1',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -85,7 +85,7 @@ def test_patch_complementary_exam(session, client, token):
     session.refresh(complementary_exam)
 
     response = client.patch(
-        f'/complementary_exams/{complementary_exam.exam_id}',
+        f'/complementary-exams/{complementary_exam.exam_id}',
         json={'exam_details': 'complementary_exam exam_details'},
         headers={'Authorization': f'Bearer {token}'},
     )
@@ -96,7 +96,7 @@ def test_patch_complementary_exam(session, client, token):
 
 def test_patch_complementary_exam_error(client, token):
     response = client.patch(
-        '/complementary_exams/10',
+        '/complementary-exams/10',
         json={},
         headers={'Authorization': f'Bearer {token}'},
     )
