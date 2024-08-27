@@ -12,6 +12,7 @@ from fast_zero.schemas import (
     TreatmentPlanList,
     TreatmentPlanPublic,
     TreatmentPlanSchema,
+    TreatmentPlanUpdate,
 )
 from fast_zero.security import get_session
 
@@ -68,9 +69,29 @@ def delete_treatment_plan(
     treatment_plan = session.query(TreatmentPlan).filter_by(plan_id=plan_id).first()
 
     if not treatment_plan:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Treatment plan not found')
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Treatment plan not found.')
 
     session.delete(treatment_plan)
     session.commit()
 
-    return {'message': 'Treatment plan deleted successfully'}
+    return {'message': 'Treatment plan deleted successfully.'}
+
+
+@router.patch('/{plan_id}', response_model=TreatmentPlanPublic)
+def update_treatment_plan(
+    plan_id: int,
+    treatment_plan: TreatmentPlanUpdate,
+    session: T_Session,
+):
+    db_treatment_plan = session.query(TreatmentPlan).filter_by(plan_id=plan_id).first()
+
+    if not db_treatment_plan:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Treatment plan not found.')
+
+    for key, value in treatment_plan.model_dump(exclude_unset=True).items():
+        setattr(db_treatment_plan, key, value)
+
+    session.commit()
+    session.refresh(db_treatment_plan)
+
+    return db_treatment_plan

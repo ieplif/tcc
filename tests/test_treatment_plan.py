@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from tests.conftest import TreatmentPlanFactory
 
 
@@ -72,4 +74,38 @@ def test_delete_treatment_plan(session, client, token):
         headers={'Authorization': f'Bearer {token}'},
     )
 
-    assert response.json() == {'message': 'Treatment plan deleted successfully'}
+    assert response.json() == {'message': 'Treatment plan deleted successfully.'}
+
+
+def test_delete_treatment_plan_error(client, token):
+    response = client.delete(f'/treatment-plan/{10}', headers={'Authorization': f'Bearer {token}'})
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Treatment plan not found.'}
+
+
+def test_update_treatment_plan(session, client, token):
+    treatment_plan = TreatmentPlanFactory()
+
+    session.add(treatment_plan)
+    session.commit()
+    session.refresh(treatment_plan)
+
+    response = client.patch(
+        f'/treatment-plan/{treatment_plan.plan_id}',
+        json={'objectives': 'treatment_plan objectives'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.json()['objectives'] == 'treatment_plan objectives'
+
+
+def test_patch_treatment_plan_error(client, token):
+    response = client.patch(
+        '/treatment-plan/10',
+        json={},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Treatment plan not found.'}
