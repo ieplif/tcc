@@ -15,6 +15,7 @@ from fast_zero.models import (
     Patient,
     PhysiotherapyDiagosis,
     Prognosis,
+    TreatmentPlan,
     User,
     table_registry,
 )
@@ -87,6 +88,16 @@ class PrognosisFactory(factory.Factory):
 
     prognosis_details = factory.Faker('text')
     patient_id = 1
+
+
+class TreatmentPlanFactory(factory.Factory):
+    class Meta:
+        model = TreatmentPlan
+
+    patient_id = 1
+    objectives = factory.Faker('text')
+    probable_sessions = factory.Faker('random_int', min=1, max=10)
+    procedures = factory.Faker('text')
 
 
 @pytest.fixture()

@@ -80,3 +80,14 @@ class Prognosis:
     prognosis_id: Mapped[int] = mapped_column(init=False, primary_key=True)
     patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
     prognosis_details: Mapped[str]
+
+
+@table_registry.mapped_as_dataclass
+class TreatmentPlan:
+    __tablename__ = 'treatments_plan'
+
+    plan_id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey('patients.id'))
+    objectives: Mapped[str]
+    probable_sessions: Mapped[int]
+    procedures: Mapped[str]

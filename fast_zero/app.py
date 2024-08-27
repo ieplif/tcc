@@ -10,6 +10,7 @@ from fast_zero.routers import (
     patients,
     physiotherapy_diagnosis,
     prognosis,
+    treatment_plan,
     users,
 )
 from fast_zero.schemas import Message
@@ -24,6 +25,7 @@ app.include_router(clinical_examination.router)
 app.include_router(complementary_exams.router)
 app.include_router(physiotherapy_diagnosis.router)
 app.include_router(prognosis.router)
+app.include_router(treatment_plan.router)
 
 
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)

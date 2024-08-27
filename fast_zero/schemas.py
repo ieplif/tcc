@@ -223,3 +223,36 @@ class PrognosisUpdate(BaseModel):
     prognosis_details: Optional[str] = None
     offset: Optional[int] = None
     limit: Optional[int] = None
+
+
+class TreatmentPlanSchema(BaseModel):
+    patient_id: int
+    objectives: str
+    probable_sessions: int
+    procedures: str
+
+
+class TreatmentPlanPublic(TreatmentPlanSchema):
+    plan_id: int
+
+
+class TreatmentPlanList(BaseModel):
+    treatment_plans: List[TreatmentPlanPublic]
+
+
+class TreatmentPlanFilter(BaseModel):
+    patient_id: Optional[int] = None
+    objectives: Optional[str] = None
+    probable_sessions: Optional[int] = None
+    procedures: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
+
+
+class TreatmentPlanUpdate(BaseModel):
+    patient_id: Optional[int] = None
+    objectives: Optional[str] = None
+    probable_sessions: Optional[int] = None
+    procedures: Optional[str] = None
+    offset: Optional[int] = None
+    limit: Optional[int] = None
