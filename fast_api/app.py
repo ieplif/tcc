@@ -2,11 +2,11 @@ from http import HTTPStatus
 
 from fastapi import FastAPI
 
-from fast_zero.routers import (
+from fast_api.routers import (
     auth,
     users,
 )
-from fast_zero.schemas import Message
+from fast_api.schemas import Message
 
 app = FastAPI()
 
