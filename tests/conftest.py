@@ -9,6 +9,7 @@ from sqlalchemy.pool import StaticPool
 from fast_api.app import app
 from fast_api.database import get_session
 from fast_api.models import (
+    UO,
     User,
     table_registry,
 )
@@ -22,6 +23,16 @@ class UserFactory(factory.Factory):
     username = factory.Sequence(lambda n: f'test{n}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
     password = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
+
+
+class UOFactory(factory.Factory):
+    class Meta:
+        model = UO
+
+    codigo = factory.fuzzy.FuzzyInteger(10000, 99999)
+    sigla = factory.fuzzy.FuzzyText(length=10)
+    nome = factory.fuzzy.FuzzyText(length=100)
+    user_id = 1
 
 
 @pytest.fixture()

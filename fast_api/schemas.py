@@ -37,3 +37,15 @@ class UOSchema(BaseModel):
 
 class UOPublic(UOSchema):
     id: int
+
+
+class UOList(BaseModel):
+    uos: list[UOPublic]
+
+
+class UOFilter(BaseModel):
+    codigo: int | None = None
+    sigla: str | None = None
+    nome: str | None = None
+    offset: int | None = None
+    limit: int | None = None
