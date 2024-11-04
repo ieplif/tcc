@@ -41,10 +41,10 @@ preview = true
 quote-style = 'single'
 
 [tool.taskipy.tasks]
-run = 'fastapi dev fast_zero/app.py'
+run = 'fastapi dev fast_api/app.py'
 
 pre_test = 'task lint'
-test = 'pytest --cov=fast_zero -vv'
+test = 'pytest --cov=fast_api -vv'
 post_test = 'coverage html'
 
 lint = 'ruff check . && ruff check . --diff'

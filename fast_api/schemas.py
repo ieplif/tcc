@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from pydantic import BaseModel, ConfigDict, EmailStr
 
@@ -27,3 +27,13 @@ class UserList(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class UOSchema(BaseModel):
+    codigo: int
+    sigla: str
+    nome: str
+
+
+class UOPublic(UOSchema):
+    id: int
