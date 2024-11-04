@@ -49,3 +49,9 @@ class UOFilter(BaseModel):
     nome: str | None = None
     offset: int | None = None
     limit: int | None = None
+
+
+class UOUpdate(BaseModel):
+    codigo: int | None = None
+    sigla: str | None = None
+    nome: str | None = None

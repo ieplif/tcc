@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from fast_api.database import get_session
 from fast_api.models import UO, User
-from fast_api.schemas import Message, UOList, UOPublic, UOSchema
+from fast_api.schemas import Message, UOList, UOPublic, UOSchema, UOUpdate
 from fast_api.security import get_current_user
 
 router = APIRouter(prefix='/uos', tags=['uos'])
@@ -47,3 +47,19 @@ def delete_uo(uo_id: int, session: SessionDep, user: UserDep):
     session.commit()
 
     return {'message': 'UO deleted'}
+
+
+@router.patch('/{uo_id}', response_model=UOPublic)
+def patch_uo(uo_id: int, uo: UOUpdate, session: SessionDep, user: UserDep):
+    db_uo = session.scalar(select(UO).where(UO.id == uo_id, UO.user_id == user.id))
+    if not db_uo:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='UO not found')
+
+    for key, value in uo.model_dump(exclude_unset=True).items():
+        setattr(db_uo, key, value)
+
+    session.add(db_uo)
+    session.commit()
+    session.refresh(db_uo)
+
+    return db_uo

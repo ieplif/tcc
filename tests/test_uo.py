@@ -32,6 +32,7 @@ def test_delete_uo(session, client, user, token):
     uo = UOFactory(user_id=user.id)
     session.add(uo)
     session.commit()
+    session.refresh(uo)
 
     response = client.delete(f'/uos/{uo.id}', headers={'Authorization': f'Bearer {token}'})
 
@@ -41,5 +42,32 @@ def test_delete_uo(session, client, user, token):
 
 def test_delete_UO_error(client, token):
     response = client.delete(f'/uos/{10}', headers={'Authorization': f'Bearer {token}'})
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'UO not found'}
+
+
+def test_patch_uo(session, client, user, token):
+    uo = UOFactory(user_id=user.id)
+    session.add(uo)
+    session.commit()
+    session.refresh(uo)
+
+    response = client.patch(
+        f'/uos/{uo.id}',
+        json={'sigla': 'SEFAZ'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json()['sigla'] == 'SEFAZ'
+
+
+def test_patch_uo_error(client, token):
+    response = client.patch(
+        '/uos/10',
+        json={},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert response.json() == {'detail': 'UO not found'}
