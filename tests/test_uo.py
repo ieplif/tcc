@@ -15,6 +15,7 @@ def test_create_uo(client, token):
         'codigo': 21010,
         'sigla': 'SEPLAG',
         'nome': 'Secretaria de Planejamento e Gestão',
+        'receitas': [],
     }
 
 

@@ -37,6 +37,7 @@ class UOSchema(BaseModel):
 
 class UOPublic(UOSchema):
     id: int
+    receitas: List['ReceitaPublic'] = []
 
 
 class UOList(BaseModel):
@@ -55,3 +56,35 @@ class UOUpdate(BaseModel):
     codigo: int | None = None
     sigla: str | None = None
     nome: str | None = None
+
+
+class ReceitaSchema(BaseModel):
+    nr: int
+    descricao: str
+    valor: float
+    mes: str
+    uo_id: int
+
+
+class ReceitaPublic(ReceitaSchema):
+    id: int
+
+
+class ReceitaList(BaseModel):
+    receitas: list[ReceitaPublic]
+
+
+class ReceitaFilter(BaseModel):
+    nr: int | None = None
+    descricao: str | None = None
+    valor: float | None = None
+    mes: str | None = None
+    offset: int | None = None
+    limit: int | None = None
+
+
+class ReceitaUpdate(BaseModel):
+    nr: int | None = None
+    descricao: str | None = None
+    valor: float | None = None
+    mes: str | None = None

@@ -10,6 +10,7 @@ from fast_api.app import app
 from fast_api.database import get_session
 from fast_api.models import (
     UO,
+    Receita,
     User,
     table_registry,
 )
@@ -33,6 +34,17 @@ class UOFactory(factory.Factory):
     sigla = factory.fuzzy.FuzzyText(length=10)
     nome = factory.fuzzy.FuzzyText(length=100)
     user_id = 1
+
+
+class ReceitaFactory(factory.Factory):
+    class Meta:
+        model = Receita
+
+    nr = factory.fuzzy.FuzzyInteger(1000000000, 9999999999)
+    descricao = factory.fuzzy.FuzzyText(length=100)
+    valor = factory.fuzzy.FuzzyFloat(0, 10000000)
+    mes = factory.fuzzy.FuzzyText(length=10)
+    uo_id = 1
 
 
 @pytest.fixture()

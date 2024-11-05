@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from fast_api.routers import (
     auth,
+    receitas,
     uo,
     users,
 )
@@ -14,6 +15,7 @@ app = FastAPI()
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(uo.router)
+app.include_router(receitas.router)
 
 
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)
