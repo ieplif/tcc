@@ -25,7 +25,6 @@ def test_list_uos_should_return_t_uos(session, client, user, token):
     session.commit()
 
     response = client.get('/uos/', headers={'Authorization': f'Bearer {token}'})
-    print(response.json())
     assert len(response.json()['uos']) == expected_uos
 
 
