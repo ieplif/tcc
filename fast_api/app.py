@@ -3,6 +3,7 @@ from http import HTTPStatus
 from fastapi import FastAPI
 
 from fast_api.routers import (
+    acoes,
     auth,
     receitas,
     uo,
@@ -16,6 +17,7 @@ app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(uo.router)
 app.include_router(receitas.router)
+app.include_router(acoes.router)
 
 
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)

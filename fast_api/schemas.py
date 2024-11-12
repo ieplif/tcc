@@ -38,6 +38,7 @@ class UOSchema(BaseModel):
 class UOPublic(UOSchema):
     id: int
     receitas: List['ReceitaPublic'] = []
+    acoes: List['AcaoPublic'] = []
 
 
 class UOList(BaseModel):
@@ -88,3 +89,40 @@ class ReceitaUpdate(BaseModel):
     descricao: str | None = None
     valor: float | None = None
     mes: str | None = None
+
+
+class AcaoSchema(BaseModel):
+    codigo_acao: int
+    nome: str
+    anexo: int
+    grupo_gasto: int
+    dotacao: float
+    uo_id: int
+
+
+class AcaoPublic(AcaoSchema):
+    id: int
+
+
+class AcaoList(BaseModel):
+    acoes: list[AcaoPublic]
+
+
+class AcaoFilter(BaseModel):
+    codigo_acao: int | None = None
+    nome: str | None = None
+    anexo: int | None = None
+    grupo_gasto: int | None = None
+    dotacao: float | None = None
+    uo_id: int | None = None
+    offset: int | None = None
+    limit: int | None = None
+
+
+class AcaoUpdate(BaseModel):
+    codigo_acao: int | None = None
+    nome: str | None = None
+    anexo: int | None = None
+    grupo_gasto: int | None = None
+    dotacao: float | None = None
+    uo_id: int | None = None

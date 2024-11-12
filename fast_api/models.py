@@ -27,6 +27,7 @@ class UO:
     nome: Mapped[str]
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     receitas = relationship('Receita', back_populates='uo')
+    acoes = relationship('Acao', back_populates='uo')
 
 
 @table_registry.mapped_as_dataclass
@@ -40,3 +41,17 @@ class Receita:
     mes: Mapped[str]
     uo_id: Mapped[int] = mapped_column(ForeignKey('uos.id'))
     uo = relationship('UO', back_populates='receitas')
+
+
+@table_registry.mapped_as_dataclass
+class Acao:
+    __tablename__ = 'acoes'
+
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    codigo_acao: Mapped[int]
+    nome: Mapped[str]
+    anexo: Mapped[int]
+    grupo_gasto: Mapped[int]
+    dotacao: Mapped[Float] = mapped_column(Float)
+    uo_id: Mapped[int] = mapped_column(ForeignKey('uos.id'))
+    uo = relationship('UO', back_populates='acoes')
