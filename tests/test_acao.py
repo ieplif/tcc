@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from tests.conftest import AcaoFactory
 
 
@@ -31,3 +33,21 @@ def test_list_acoes_should_return_t_acoes(session, client, token):
 
     response = client.get('/uos/1/acoes', headers={'Authorization': f'Bearer {token}'})
     assert len(response.json()['acoes']) == expected_acoes
+
+
+def test_delete_acao(session, client, token):
+    acao = AcaoFactory(uo_id=1)
+    session.add(acao)
+    session.commit()
+    session.refresh(acao)
+
+    response = client.delete(f'/uos/1/acoes/{acao.id}', headers={'Authorization': f'Bearer {token}'})
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'message': 'Acao deleted'}
+
+
+def test_delete_acao_error(client, token):
+    response = client.delete(f'/uos/1/acoes/{10}', headers={'Authorization': f'Bearer {token}'})
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Acao not found'}
