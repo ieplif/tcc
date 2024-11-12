@@ -18,7 +18,6 @@ def create_acao(uo_id: int, acao: AcaoSchema, session: SessionDep):
         codigo_acao=acao.codigo_acao,
         nome=acao.nome,
         anexo=acao.anexo,
-        grupo_gasto=acao.grupo_gasto,
         dotacao=acao.dotacao,
         uo_id=uo_id,
     )

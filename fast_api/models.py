@@ -51,7 +51,6 @@ class Acao:
     codigo_acao: Mapped[int]
     nome: Mapped[str]
     anexo: Mapped[int]
-    grupo_gasto: Mapped[int]
     dotacao: Mapped[Float] = mapped_column(Float)
     uo_id: Mapped[int] = mapped_column(ForeignKey('uos.id'))
     uo = relationship('UO', back_populates='acoes')

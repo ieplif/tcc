@@ -95,7 +95,6 @@ class AcaoSchema(BaseModel):
     codigo_acao: int
     nome: str
     anexo: int
-    grupo_gasto: int
     dotacao: float
     uo_id: int
 
@@ -112,7 +111,6 @@ class AcaoFilter(BaseModel):
     codigo_acao: int | None = None
     nome: str | None = None
     anexo: int | None = None
-    grupo_gasto: int | None = None
     dotacao: float | None = None
     uo_id: int | None = None
     offset: int | None = None
@@ -123,6 +121,5 @@ class AcaoUpdate(BaseModel):
     codigo_acao: int | None = None
     nome: str | None = None
     anexo: int | None = None
-    grupo_gasto: int | None = None
     dotacao: float | None = None
     uo_id: int | None = None

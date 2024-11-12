@@ -5,7 +5,6 @@ def test_create_acao(client, token):
             'codigo_acao': '12345',
             'nome': 'Acao Teste',
             'anexo': 2,
-            'grupo_gasto': 6,
             'dotacao': 100000.0,
             'uo_id': 1,
         },
@@ -17,7 +16,6 @@ def test_create_acao(client, token):
         'codigo_acao': 12345,
         'nome': 'Acao Teste',
         'anexo': 2,
-        'grupo_gasto': 6,
         'dotacao': 100000.0,
         'uo_id': 1,
     }
