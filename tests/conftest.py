@@ -10,6 +10,7 @@ from fast_api.app import app
 from fast_api.database import get_session
 from fast_api.models import (
     UO,
+    Acao,
     Receita,
     User,
     table_registry,
@@ -44,6 +45,17 @@ class ReceitaFactory(factory.Factory):
     descricao = factory.fuzzy.FuzzyText(length=100)
     valor = factory.fuzzy.FuzzyFloat(0, 10000000)
     mes = factory.fuzzy.FuzzyText(length=10)
+    uo_id = 1
+
+
+class AcaoFactory(factory.Factory):
+    class Meta:
+        model = Acao
+
+    codigo_acao = factory.fuzzy.FuzzyInteger(10000, 99999)
+    nome = factory.fuzzy.FuzzyText(length=100)
+    anexo = factory.fuzzy.FuzzyInteger(1, 10)
+    dotacao = factory.fuzzy.FuzzyFloat(0, 10000000)
     uo_id = 1
 
 
