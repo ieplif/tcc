@@ -11,6 +11,7 @@ from fast_api.database import get_session
 from fast_api.models import (
     UO,
     Acao,
+    Despesa,
     Receita,
     User,
     table_registry,
@@ -57,6 +58,20 @@ class AcaoFactory(factory.Factory):
     anexo = factory.fuzzy.FuzzyInteger(1, 10)
     dotacao = factory.fuzzy.FuzzyFloat(0, 10000000)
     uo_id = 1
+
+
+class DespesaFactory(factory.Factory):
+    class Meta:
+        model = Despesa
+
+    grupo_de_gasto = factory.fuzzy.FuzzyText(length=100)
+    subelemento = factory.fuzzy.FuzzyInteger(10000000, 99999999)
+    descricao = factory.fuzzy.FuzzyText(length=100)
+    processo = factory.fuzzy.FuzzyText(length=100)
+    favorecido = factory.fuzzy.FuzzyText(length=100)
+    mes = factory.fuzzy.FuzzyText(length=10)
+    valor = factory.fuzzy.FuzzyFloat(0, 10000000)
+    acao_id = 1
 
 
 @pytest.fixture()
