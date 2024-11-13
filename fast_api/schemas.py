@@ -101,6 +101,7 @@ class AcaoSchema(BaseModel):
 
 class AcaoPublic(AcaoSchema):
     id: int
+    despesas: List['DespesaPublic'] = []
 
 
 class AcaoList(BaseModel):
@@ -123,3 +124,33 @@ class AcaoUpdate(BaseModel):
     anexo: int | None = None
     dotacao: float | None = None
     uo_id: int | None = None
+
+
+class DespesaSchema(BaseModel):
+    grupo_de_gasto: str
+    subelemento: int
+    descricao: str
+    processo: str
+    favorecido: str
+    mes: str
+    valor: float
+    acao_id: int
+
+
+class DespesaPublic(DespesaSchema):
+    id: int
+
+
+class DespesaList(BaseModel):
+    despesas: list[DespesaPublic]
+
+
+class DespesaUpdate(BaseModel):
+    grupo_de_gasto: str | None = None
+    subelemento: int | None = None
+    descricao: str | None = None
+    processo: str | None = None
+    favorecido: str | None = None
+    mes: str | None = None
+    valor: float | None = None
+    acao_id: int | None = None

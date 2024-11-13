@@ -23,6 +23,7 @@ def test_create_acao(client, token):
         'anexo': 2,
         'dotacao': 100000.0,
         'uo_id': 1,
+        'despesas': [],
     }
 
 
@@ -49,5 +50,32 @@ def test_delete_acao(session, client, token):
 
 def test_delete_acao_error(client, token):
     response = client.delete(f'/uos/1/acoes/{10}', headers={'Authorization': f'Bearer {token}'})
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Acao not found'}
+
+
+def test_patch_acao(session, client, token):
+    acao = AcaoFactory(uo_id=1)
+    session.add(acao)
+    session.commit()
+    session.refresh(acao)
+
+    response = client.patch(
+        f'/uos/1/acoes/{acao.id}',
+        json={'nome': 'Acao de Teste'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json()['nome'] == 'Acao de Teste'
+
+
+def test_patch_acao_error(client, token):
+    response = client.patch(
+        '/uos/1/acoes/10',
+        json={'nome': 'Acao Atualizada'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert response.json() == {'detail': 'Acao not found'}

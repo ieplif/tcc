@@ -54,3 +54,20 @@ class Acao:
     dotacao: Mapped[Float] = mapped_column(Float)
     uo_id: Mapped[int] = mapped_column(ForeignKey('uos.id'))
     uo = relationship('UO', back_populates='acoes')
+    despesas = relationship('Despesa', back_populates='acao')
+
+
+@table_registry.mapped_as_dataclass
+class Despesa:
+    __tablename__ = 'despesas'
+
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    grupo_de_gasto: Mapped[str]
+    subelemento: Mapped[int]
+    descricao: Mapped[str]
+    processo: Mapped[str]
+    favorecido: Mapped[str]
+    mes: Mapped[str]
+    valor: Mapped[Float] = mapped_column(Float)
+    acao_id: Mapped[int] = mapped_column(ForeignKey('acoes.id'))
+    acao = relationship('Acao', back_populates='despesas')

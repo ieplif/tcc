@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from fast_api.database import get_session
 from fast_api.models import Acao
-from fast_api.schemas import AcaoList, AcaoPublic, AcaoSchema, Message
+from fast_api.schemas import AcaoList, AcaoPublic, AcaoSchema, AcaoUpdate, Message
 
 router = APIRouter(prefix='/uos', tags=['uos'])
 
@@ -48,3 +48,20 @@ def delete_acao(uo_id: int, acao_id: int, session: SessionDep):
     session.commit()
 
     return {'message': 'Acao deleted'}
+
+
+@router.patch('/{uo_id}/acoes/{acao_id}', response_model=AcaoPublic)
+def patch_acao(uo_id: int, acao_id: int, acao: AcaoUpdate, session: SessionDep):
+    db_acao = session.scalar(select(Acao).where(Acao.id == acao_id, Acao.uo_id == uo_id))
+
+    if not db_acao:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Acao not found')
+
+    for key, value in acao.model_dump(exclude_unset=True).items():
+        setattr(db_acao, key, value)
+
+    session.add(db_acao)
+    session.commit()
+    session.refresh(db_acao)
+
+    return db_acao
